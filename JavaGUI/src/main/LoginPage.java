@@ -17,13 +17,14 @@ import javax.swing.SwingConstants;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
+import javax.swing.JCheckBox;
 
 public class LoginPage extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField kullaniciAdiTextField;
-	private JPasswordField passwordField;
+	private JPasswordField parolaTextField;
 
 	/**
 	 * Launch the application.
@@ -71,9 +72,9 @@ public class LoginPage extends JFrame {
 		kullaniciAdiLabel.setBounds(22, 131, 93, 14);
 		rightPanel.add(kullaniciAdiLabel);
 		
-		JLabel sifreLabel = new JLabel("SIFRE\r\n");
-		sifreLabel.setBounds(22, 214, 56, 14);
-		rightPanel.add(sifreLabel);
+		JLabel parolaLabel = new JLabel("PAROLA");
+		parolaLabel.setBounds(22, 214, 56, 14);
+		rightPanel.add(parolaLabel);
 		
 		kullaniciAdiTextField = new JTextField();
 		kullaniciAdiTextField.setHorizontalAlignment(SwingConstants.CENTER);
@@ -82,12 +83,12 @@ public class LoginPage extends JFrame {
 		rightPanel.add(kullaniciAdiTextField);
 		kullaniciAdiTextField.setColumns(10);
 		
-		passwordField = new JPasswordField();
-		passwordField.setEchoChar('*');
-		passwordField.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		passwordField.setHorizontalAlignment(SwingConstants.CENTER);
-		passwordField.setBounds(22, 230, 362, 36);
-		rightPanel.add(passwordField);
+		parolaTextField = new JPasswordField();
+		parolaTextField.setEchoChar('*');
+		parolaTextField.setFont(new Font("Tahoma", Font.PLAIN, 25));
+		parolaTextField.setHorizontalAlignment(SwingConstants.CENTER);
+		parolaTextField.setBounds(22, 230, 362, 36);
+		rightPanel.add(parolaTextField);
 		
 		JButton girisButton = new JButton("GIRIS");
 		girisButton.setBackground(SystemColor.activeCaption);
@@ -114,6 +115,25 @@ public class LoginPage extends JFrame {
 		kayitOlButton.setBackground(SystemColor.activeCaption);
 		kayitOlButton.setBounds(203, 360, 181, 23);
 		rightPanel.add(kayitOlButton);
+		
+		JCheckBox gosterCheckBox = new JCheckBox("GOSTER");
+		gosterCheckBox.setHorizontalAlignment(SwingConstants.RIGHT);
+		gosterCheckBox.setForeground(SystemColor.activeCaption);
+		gosterCheckBox.setBackground(SystemColor.window);
+		gosterCheckBox.setBounds(287, 210, 97, 18);
+		rightPanel.add(gosterCheckBox);
+		gosterCheckBox.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (gosterCheckBox.isSelected())
+					parolaTextField.setEchoChar((char)0);
+				else
+					parolaTextField.setEchoChar('*');
+			}
+			
+		});
+		
 		kayitOlButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
