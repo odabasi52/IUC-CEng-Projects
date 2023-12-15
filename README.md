@@ -1,2 +1,2 @@
 # BankGUI
-JAVA 
+Java Swing application designed for Object Oriented Programming Lecture.
