@@ -1,6 +1,6 @@
 package main;
 
-import java.awt.EventQueue;
+import java.security.*;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -19,25 +19,17 @@ import javax.swing.JButton;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 
+/* calisanlar table
+ * talha | parola | not admin
+ * admin | admin  | yes admin
+ */
 public class LoginPage extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField kullaniciAdiTextField;
 	private JPasswordField parolaTextField;
-
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					LoginPage frame = new LoginPage();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	
 
 	public LoginPage() {
 		super("GIRIS SAYFASI");
@@ -89,6 +81,20 @@ public class LoginPage extends JFrame {
 		girisButton.setForeground(SystemColor.window);
 		girisButton.setBounds(26, 277, 89, 23);
 		rightPanel.add(girisButton);
+		girisButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					MessageDigest md5 = MessageDigest.getInstance("SHA-256");
+					byte[] hash = md5.digest(new String(parolaTextField.getPassword()).getBytes());
+					StringBuilder hexString = new StringBuilder();
+				    for (byte b : hash) {
+				      hexString.append(String.format("%02x", b));
+				    }
+				} catch (NoSuchAlgorithmException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
 		
 		JLabel hesabimYokLabel = new JLabel("HESABIM YOK");
 		hesabimYokLabel.setBounds(22, 364, 123, 14);
@@ -118,7 +124,6 @@ public class LoginPage extends JFrame {
 		kayitOlButton.setBounds(203, 360, 181, 23);
 		rightPanel.add(kayitOlButton);
 		kayitOlButton.addActionListener(new ActionListener() {
-			@Override
 			public void actionPerformed(ActionEvent e) {
 				SignUpPage signUpPage = new SignUpPage();
 				signUpPage.setVisible(true);
@@ -126,15 +131,13 @@ public class LoginPage extends JFrame {
 			}
 		});
 		
-		JCheckBox gosterCheckBox = new JCheckBox("GOSTER");
+		final JCheckBox gosterCheckBox = new JCheckBox("GOSTER");
 		gosterCheckBox.setHorizontalAlignment(SwingConstants.RIGHT);
 		gosterCheckBox.setForeground(SystemColor.activeCaption);
 		gosterCheckBox.setBackground(SystemColor.window);
 		gosterCheckBox.setBounds(287, 210, 97, 18);
 		rightPanel.add(gosterCheckBox);
 		gosterCheckBox.addActionListener(new ActionListener() {
-
-			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (gosterCheckBox.isSelected())
 					parolaTextField.setEchoChar((char)0);

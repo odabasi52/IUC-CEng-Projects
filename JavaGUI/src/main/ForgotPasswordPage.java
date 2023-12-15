@@ -56,7 +56,6 @@ public class ForgotPasswordPage extends JFrame {
 		leftPanel.add(geriButton);
 		geriButton.addActionListener(new ActionListener() {
 
-			@Override
 			public void actionPerformed(ActionEvent e) {
 				LoginPage loginPage = new LoginPage();
 				loginPage.setVisible(true);
@@ -114,7 +113,7 @@ public class ForgotPasswordPage extends JFrame {
 		rightPanel.add(guvenlikSorusuLabel);
 		
 		String[] elements = {"Annenizin Kızlık Soyadı nedir?", "Gittiğiniz İlkokul' un Adı nedir?", "Evcil Hayvanınızın Adı nedir?"};
-		JComboBox guvenlikSorulariComboBox = new JComboBox(elements);
+		JComboBox<String> guvenlikSorulariComboBox = new JComboBox<String>(elements);
 		guvenlikSorulariComboBox.setBounds(10, 296, 392, 22);
 		rightPanel.add(guvenlikSorulariComboBox);
 		

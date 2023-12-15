@@ -43,8 +43,6 @@ public class SignUpPage extends JFrame {
 		geriButton.setBounds(10, 427, 82, 23);
 		leftPanel.add(geriButton);
 		geriButton.addActionListener(new ActionListener() {
-
-			@Override
 			public void actionPerformed(ActionEvent e) {
 				LoginPage loginPage = new LoginPage();
 				loginPage.setVisible(true);
@@ -108,12 +106,28 @@ public class SignUpPage extends JFrame {
 		parolaTextField.setBounds(10, 231, 392, 28);
 		rightPanel.add(parolaTextField);
 		
+		final JCheckBox gosterCheckBox = new JCheckBox("GOSTER");
+		gosterCheckBox.setForeground(SystemColor.activeCaption);
+		gosterCheckBox.setHorizontalAlignment(SwingConstants.RIGHT);
+		gosterCheckBox.setBackground(SystemColor.window);
+		gosterCheckBox.setBounds(273, 216, 129, 14);
+		rightPanel.add(gosterCheckBox);
+		gosterCheckBox.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (gosterCheckBox.isSelected())
+					parolaTextField.setEchoChar((char)0);
+				else
+					parolaTextField.setEchoChar('*');
+			}
+			
+		});
+		
 		JLabel guvenlikSorusuLabel = new JLabel("GUVENLIK SORUSU");
 		guvenlikSorusuLabel.setBounds(10, 281, 137, 14);
 		rightPanel.add(guvenlikSorusuLabel);
 		
 		String[] elements = {"Annenizin Kızlık Soyadı nedir?", "Gittiğiniz İlkokul' un Adı nedir?", "Evcil Hayvanınızın Adı nedir?"};
-		JComboBox guvenlikSorulariComboBox = new JComboBox(elements);
+		JComboBox<String> guvenlikSorulariComboBox = new JComboBox<String>(elements);
 		guvenlikSorulariComboBox.setBounds(10, 306, 392, 22);
 		rightPanel.add(guvenlikSorulariComboBox);
 		
@@ -123,7 +137,7 @@ public class SignUpPage extends JFrame {
 		guvenlikSorulariTextField.setColumns(10);
 		guvenlikSorulariTextField.setBounds(10, 331, 392, 28);
 		rightPanel.add(guvenlikSorulariTextField);
-		
+
 		JButton kayitOlButton = new JButton("KAYIT OL");
 		kayitOlButton.setBackground(SystemColor.activeCaption);
 		kayitOlButton.setForeground(SystemColor.window);
@@ -145,25 +159,6 @@ public class SignUpPage extends JFrame {
 				}
 			}
 		});
-		
-		JCheckBox gosterCheckBox = new JCheckBox("GOSTER");
-		gosterCheckBox.setForeground(SystemColor.activeCaption);
-		gosterCheckBox.setHorizontalAlignment(SwingConstants.RIGHT);
-		gosterCheckBox.setBackground(SystemColor.window);
-		gosterCheckBox.setBounds(273, 216, 129, 14);
-		rightPanel.add(gosterCheckBox);
-		gosterCheckBox.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (gosterCheckBox.isSelected())
-					parolaTextField.setEchoChar((char)0);
-				else
-					parolaTextField.setEchoChar('*');
-			}
-			
-		});
-		
-	
 		
 		
 		
