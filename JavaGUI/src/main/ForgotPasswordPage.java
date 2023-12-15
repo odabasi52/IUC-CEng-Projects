@@ -1,22 +1,34 @@
 package main;
 
-import javax.swing.*;
+import java.awt.Font;
+import java.awt.SystemColor;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import java.awt.*;
-import java.awt.event.*;
-
-public class SignUpPage extends JFrame {
+public class ForgotPasswordPage extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField tcKimlikTextField;
 	private JTextField kullaniciAdiTextField;
-	private JPasswordField parolaTextField;
 	private JTextField guvenlikSorulariTextField;
 
-	public SignUpPage() {
-		super("KAYIT SAYFASI");
+	public ForgotPasswordPage() {
+		super("PAROLA YENILEME SAYFASI");
+		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 800, 500);
 		setResizable(false);
@@ -59,29 +71,25 @@ public class SignUpPage extends JFrame {
 		contentPane.add(rightPanel);
 		rightPanel.setLayout(null);
 		
-		JLabel kayitSayfasiLabel = new JLabel("KAYIT SAYFASI");
-		kayitSayfasiLabel.setForeground(SystemColor.activeCaption);
-		kayitSayfasiLabel.setFont(new Font("Tahoma", Font.BOLD, 36));
-		kayitSayfasiLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		kayitSayfasiLabel.setBounds(36, 11, 366, 72);
-		rightPanel.add(kayitSayfasiLabel);
+		JLabel parolaYenilemeLabel = new JLabel("PAROLA YENILEME");
+		parolaYenilemeLabel.setForeground(SystemColor.activeCaption);
+		parolaYenilemeLabel.setFont(new Font("Tahoma", Font.BOLD, 36));
+		parolaYenilemeLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		parolaYenilemeLabel.setBounds(36, 11, 366, 72);
+		rightPanel.add(parolaYenilemeLabel);
 		
 		JLabel tcKimlikLabel = new JLabel("TC KIMLIK");
-		tcKimlikLabel.setBounds(10, 82, 137, 14);
+		tcKimlikLabel.setBounds(10, 127, 137, 14);
 		rightPanel.add(tcKimlikLabel);
 		
 		JLabel kullaniciAdiLabel = new JLabel("KULLANICI ADI");
-		kullaniciAdiLabel.setBounds(10, 149, 137, 14);
+		kullaniciAdiLabel.setBounds(10, 202, 137, 14);
 		rightPanel.add(kullaniciAdiLabel);
-		
-		JLabel parolaLabel = new JLabel("PAROLA");
-		parolaLabel.setBounds(10, 216, 137, 14);
-		rightPanel.add(parolaLabel);
 		
 		tcKimlikTextField = new JTextField();
 		tcKimlikTextField.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		tcKimlikTextField.setHorizontalAlignment(SwingConstants.CENTER);
-		tcKimlikTextField.setBounds(10, 100, 392, 28);
+		tcKimlikTextField.setBounds(10, 147, 392, 28);
 		rightPanel.add(tcKimlikTextField);
 		tcKimlikTextField.setColumns(10);
 		tcKimlikTextField.addKeyListener(new KeyAdapter() {
@@ -98,74 +106,36 @@ public class SignUpPage extends JFrame {
 		kullaniciAdiTextField.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		kullaniciAdiTextField.setHorizontalAlignment(SwingConstants.CENTER);
 		kullaniciAdiTextField.setColumns(10);
-		kullaniciAdiTextField.setBounds(10, 166, 392, 28);
+		kullaniciAdiTextField.setBounds(10, 222, 392, 28);
 		rightPanel.add(kullaniciAdiTextField);
 		
-		parolaTextField = new JPasswordField();
-		parolaTextField.setHorizontalAlignment(SwingConstants.CENTER);
-		parolaTextField.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		parolaTextField.setEchoChar('*');
-		parolaTextField.setBounds(10, 231, 392, 28);
-		rightPanel.add(parolaTextField);
-		
 		JLabel guvenlikSorusuLabel = new JLabel("GUVENLIK SORUSU");
-		guvenlikSorusuLabel.setBounds(10, 281, 137, 14);
+		guvenlikSorusuLabel.setBounds(10, 274, 137, 14);
 		rightPanel.add(guvenlikSorusuLabel);
 		
 		String[] elements = {"Annenizin Kızlık Soyadı nedir?", "Gittiğiniz İlkokul' un Adı nedir?", "Evcil Hayvanınızın Adı nedir?"};
 		JComboBox guvenlikSorulariComboBox = new JComboBox(elements);
-		guvenlikSorulariComboBox.setBounds(10, 306, 392, 22);
+		guvenlikSorulariComboBox.setBounds(10, 296, 392, 22);
 		rightPanel.add(guvenlikSorulariComboBox);
 		
 		guvenlikSorulariTextField = new JTextField();
 		guvenlikSorulariTextField.setHorizontalAlignment(SwingConstants.CENTER);
 		guvenlikSorulariTextField.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		guvenlikSorulariTextField.setColumns(10);
-		guvenlikSorulariTextField.setBounds(10, 331, 392, 28);
+		guvenlikSorulariTextField.setBounds(10, 321, 392, 28);
 		rightPanel.add(guvenlikSorulariTextField);
 		
-		JButton kayitOlButton = new JButton("KAYIT OL");
-		kayitOlButton.setBackground(SystemColor.activeCaption);
-		kayitOlButton.setForeground(SystemColor.window);
-		kayitOlButton.setBounds(10, 413, 109, 23);
-		rightPanel.add(kayitOlButton);
-		kayitOlButton.addActionListener(new ActionListener() {
+		JButton sifirlaButton = new JButton("SIFIRLA");
+		sifirlaButton.setBackground(SystemColor.activeCaption);
+		sifirlaButton.setForeground(SystemColor.window);
+		sifirlaButton.setBounds(151, 358, 109, 23);
+		rightPanel.add(sifirlaButton);
+		sifirlaButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				/*SIFIRLAMA ISLEMLERI*/
 				if (tcKimlikTextField.getText().length() != 11)
 					JOptionPane.showMessageDialog(new JFrame(), "TC Kimlik 11 Haneli Olmalıdır.");
-				else if(kullaniciAdiTextField.getText().length() < 3)
-					JOptionPane.showMessageDialog(new JFrame(), "Geçerli bir Kullanıcı Adı Giriniz.");
-				else if (parolaTextField.getPassword().length < 8) 
-					JOptionPane.showMessageDialog(new JFrame(), "Parola en az 8 Haneli Olmalıdır.");
-				else if (guvenlikSorulariTextField.getText().length() < 3)
-					JOptionPane.showMessageDialog(new JFrame(), "Güvenlik Sorusu Seçip Geçerli Cevap Veriniz.");
-				else
-				{
-					/*KAYIT OLMA ISLEMLERI*/
-				}
 			}
 		});
-		
-		JCheckBox gosterCheckBox = new JCheckBox("GOSTER");
-		gosterCheckBox.setForeground(SystemColor.activeCaption);
-		gosterCheckBox.setHorizontalAlignment(SwingConstants.RIGHT);
-		gosterCheckBox.setBackground(SystemColor.window);
-		gosterCheckBox.setBounds(273, 216, 129, 14);
-		rightPanel.add(gosterCheckBox);
-		gosterCheckBox.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (gosterCheckBox.isSelected())
-					parolaTextField.setEchoChar((char)0);
-				else
-					parolaTextField.setEchoChar('*');
-			}
-			
-		});
-		
-	
-		
-		
-		
 	}
 }

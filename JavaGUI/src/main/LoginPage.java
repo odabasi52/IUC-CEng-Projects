@@ -26,9 +26,6 @@ public class LoginPage extends JFrame {
 	private JTextField kullaniciAdiTextField;
 	private JPasswordField parolaTextField;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -42,9 +39,6 @@ public class LoginPage extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
 	public LoginPage() {
 		super("GIRIS SAYFASI");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -109,12 +103,28 @@ public class LoginPage extends JFrame {
 		parolaSifirlaButton.setBackground(SystemColor.activeCaption);
 		parolaSifirlaButton.setBounds(203, 402, 181, 23);
 		rightPanel.add(parolaSifirlaButton);
+		parolaSifirlaButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				ForgotPasswordPage forgotPasswordPage = new ForgotPasswordPage();
+				forgotPasswordPage.setVisible(true);
+				setVisible(false);
+			}
+		});
 		
 		JButton kayitOlButton = new JButton("KAYIT OL");
 		kayitOlButton.setForeground(SystemColor.window);
 		kayitOlButton.setBackground(SystemColor.activeCaption);
 		kayitOlButton.setBounds(203, 360, 181, 23);
 		rightPanel.add(kayitOlButton);
+		kayitOlButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				SignUpPage signUpPage = new SignUpPage();
+				signUpPage.setVisible(true);
+				setVisible(false);
+			}
+		});
 		
 		JCheckBox gosterCheckBox = new JCheckBox("GOSTER");
 		gosterCheckBox.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -133,16 +143,7 @@ public class LoginPage extends JFrame {
 			}
 			
 		});
-		
-		kayitOlButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				SignUpPage signUpPage = new SignUpPage();
-				signUpPage.setVisible(true);
-				setVisible(false);
-			}
-		});
-		
+
 		JPanel leftPanel = new JPanel();
 		leftPanel.setBackground(SystemColor.activeCaption);
 		leftPanel.setBounds(0, 0, 367, 461);
