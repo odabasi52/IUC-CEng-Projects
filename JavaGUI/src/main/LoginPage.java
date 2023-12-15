@@ -23,7 +23,7 @@ import javax.swing.JCheckBox;
  * talha | parola | not admin
  * admin | admin  | yes admin
  */
-public class LoginPage extends JFrame {
+public class LoginPage extends DatabaseStuffs {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;

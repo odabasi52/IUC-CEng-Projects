@@ -5,8 +5,10 @@ import javax.swing.border.EmptyBorder;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-public class SignUpPage extends JFrame {
+public class SignUpPage extends DatabaseStuffs {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -156,6 +158,26 @@ public class SignUpPage extends JFrame {
 				else
 				{
 					/*KAYIT OLMA ISLEMLERI*/
+					try {
+						ResultSet res = selectQuery("SELECT COUNT(tc_kimlik) FROM kullanicilar WHERE tc_kimlik = '" + createHash(tcKimlikTextField.getText()) + "';");
+						if (res.next() && res.getInt(1) > 0) {
+							JOptionPane.showMessageDialog(new JFrame(), "TC Numarası ile Kayıt bulunmaktadır.");
+							res.close();
+							return ;
+						}
+						res.close();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					otherQuery(String.format("INSERT INTO kullanicilar(isim,tc_kimlik,parola,soru_id,soru_cevap) VALUES('%s', '%s', '%s', %d, '%s');", 
+						kullaniciAdiTextField.getText(),
+					    createHash(tcKimlikTextField.getText()),
+					    createHash(new String(parolaTextField.getPassword())),
+					    guvenlikSorulariComboBox.getSelectedIndex(),
+					    guvenlikSorulariTextField.getText()
+					));
+					JOptionPane.showMessageDialog(new JFrame(), "Kayıt Başarılı.");
 				}
 			}
 		});
