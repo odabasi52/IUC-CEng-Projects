@@ -19,11 +19,7 @@ import javax.swing.JButton;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 
-/* calisanlar table
- * talha | parola | not admin
- * admin | admin  | yes admin
- */
-public class LoginPage extends DatabaseStuffs {
+public class LoginPage extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;

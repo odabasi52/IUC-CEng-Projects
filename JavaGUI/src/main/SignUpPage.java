@@ -5,10 +5,8 @@ import javax.swing.border.EmptyBorder;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
-public class SignUpPage extends DatabaseStuffs {
+public class SignUpPage extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -158,26 +156,13 @@ public class SignUpPage extends DatabaseStuffs {
 				else
 				{
 					/*KAYIT OLMA ISLEMLERI*/
-					try {
-						ResultSet res = selectQuery("SELECT COUNT(tc_kimlik) FROM kullanicilar WHERE tc_kimlik = '" + createHash(tcKimlikTextField.getText()) + "';");
-						if (res.next() && res.getInt(1) > 0) {
-							JOptionPane.showMessageDialog(new JFrame(), "TC Numarası ile Kayıt bulunmaktadır.");
-							res.close();
-							return ;
-						}
-						res.close();
-					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+					Kullanicilar k = new Kullanicilar();
+					if(k.checkUser(tcKimlikTextField.getText()))
+					{
+						k.create(kullaniciAdiTextField.getText(), tcKimlikTextField.getText(), new String(parolaTextField.getPassword()),
+								guvenlikSorulariComboBox.getSelectedIndex(), guvenlikSorulariTextField.getText());
+						JOptionPane.showMessageDialog(new JFrame(), "Kayıt Başarılı.");
 					}
-					otherQuery(String.format("INSERT INTO kullanicilar(isim,tc_kimlik,parola,soru_id,soru_cevap) VALUES('%s', '%s', '%s', %d, '%s');", 
-						kullaniciAdiTextField.getText(),
-					    createHash(tcKimlikTextField.getText()),
-					    createHash(new String(parolaTextField.getPassword())),
-					    guvenlikSorulariComboBox.getSelectedIndex(),
-					    guvenlikSorulariTextField.getText()
-					));
-					JOptionPane.showMessageDialog(new JFrame(), "Kayıt Başarılı.");
 				}
 			}
 		});

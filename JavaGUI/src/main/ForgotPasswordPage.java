@@ -129,11 +129,34 @@ public class ForgotPasswordPage extends JFrame {
 		sifirlaButton.setForeground(SystemColor.window);
 		sifirlaButton.setBounds(151, 358, 109, 23);
 		rightPanel.add(sifirlaButton);
+		
+		JLabel noteLabel = new JLabel("Eğer çalışansanız lütfen yönetime ulaşın");
+		noteLabel.setForeground(SystemColor.activeCaption);
+		noteLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		noteLabel.setBounds(70, 64, 313, 14);
+		rightPanel.add(noteLabel);
 		sifirlaButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				/*SIFIRLAMA ISLEMLERI*/
 				if (tcKimlikTextField.getText().length() != 11)
 					JOptionPane.showMessageDialog(new JFrame(), "TC Kimlik 11 Haneli Olmalıdır.");
+				else {
+					Kullanicilar k = new Kullanicilar();
+					if (k.checkUserForgotPassword(tcKimlikTextField.getText(), kullaniciAdiTextField.getText()
+							, guvenlikSorulariComboBox.getSelectedIndex(), guvenlikSorulariTextField.getText()))
+					{
+						String parola = JOptionPane.showInputDialog("Yeni Parola");
+						while (parola.length() < 8)
+							parola = JOptionPane.showInputDialog("Yeni Parola [En az 8 Haneli]");
+						if (parola != null)
+						{
+							k.otherQuery("UPDATE kullanicilar SET parola = '" + k.createHash(parola) + "' WHERE tc_kimlik = '" + k.createHash(tcKimlikTextField.getText()) + "';");
+							JOptionPane.showMessageDialog(new JFrame(), "Parolanız başarı ile sıfırlandı.");
+						}
+					}
+					else
+						JOptionPane.showMessageDialog(new JFrame(), "Kullanıcı Bulunamadı.");
+				}
 			}
 		});
 	}

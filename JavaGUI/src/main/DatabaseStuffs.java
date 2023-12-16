@@ -7,15 +7,12 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-import javax.swing.JFrame;
 
-public abstract class DatabaseStuffs extends JFrame{
-	private static final long serialVersionUID = 1L;
-	final String path = "D:\\\\Projects\\\\Java Projects\\\\BankGUI\\\\JavaGUI\\\\gui.db";
-	DatabaseStuffs(String s)
-	{
-		super(s);
-	}
+public abstract class DatabaseStuffs{
+	final String path = "D:\\Projects\\Java Projects\\BankGUI\\JavaGUI\\gui.db";
+	Connection conn = null;
+	Statement stmt = null;
+	ResultSet res = null;
 	
 	StringBuilder createHash(String str)
 	{
@@ -28,32 +25,16 @@ public abstract class DatabaseStuffs extends JFrame{
 		      hexString.append(String.format("%02x", b));
 		    }
 		    return (hexString);
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} catch (NoSuchAlgorithmException e) {}
 		return (null);
 	}
 	
-	ResultSet selectQuery(String query)
-	{
-		Connection conn = null;
-		Statement stmt = null;
-		ResultSet res = null;
-		try {
-			conn = DriverManager.getConnection("jdbc:sqlite:" + path);
-			stmt = conn.createStatement();
-			res = stmt.executeQuery(query);		
-		}
-		catch(Exception e) {}
-		return (res);
-	}
-	
 	void otherQuery(String query) {
-		Connection conn = null;
-		Statement stmt = null;
+		conn = null;
+		stmt = null;
 		
 		try {
+			Class.forName("org.sqlite.JDBC");
 			conn = DriverManager.getConnection("jdbc:sqlite:" + path);
 			conn.setAutoCommit(false);
 			stmt = conn.createStatement();
@@ -62,7 +43,8 @@ public abstract class DatabaseStuffs extends JFrame{
 			conn.commit();
 			conn.close();
 		}
-		catch (Exception e){	
+		catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 }
