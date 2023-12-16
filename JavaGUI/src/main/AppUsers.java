@@ -6,9 +6,9 @@ import java.util.Random;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-public class Kullanicilar extends DatabaseStuffs{
+public class AppUsers extends DatabaseStuffs{
 
-	boolean checkUser(String tc_kimlik)
+	boolean checkUser(String tc_kimlik, String isim)
 	{
 		conn = null;
 		stmt = null;
@@ -20,6 +20,12 @@ public class Kullanicilar extends DatabaseStuffs{
 			res = stmt.executeQuery("SELECT COUNT(id) FROM kullanicilar WHERE tc_kimlik = '" + createHash(tc_kimlik) + "';");		
 			if (res.next() && res.getInt(1) > 0) {
 				JOptionPane.showMessageDialog(new JFrame(), "TC Numarası ile Kayıt bulunmaktadır.");
+				res.close();
+				return (false);
+			}
+			res = stmt.executeQuery("SELECT COUNT(id) FROM kullanicilar WHERE isim = '" + isim + "';");
+			if (res.next() && res.getInt(1) > 0) {
+				JOptionPane.showMessageDialog(new JFrame(), "Kullanıcı Adı ile Kayıt bulunmaktadır.");
 				res.close();
 				return (false);
 			}

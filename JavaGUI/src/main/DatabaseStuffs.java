@@ -8,8 +8,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 
-public abstract class DatabaseStuffs{
-	final String path = "D:\\Projects\\Java Projects\\BankGUI\\JavaGUI\\gui.db";
+public abstract class DatabaseStuffs implements DatabasePath{
 	Connection conn = null;
 	Statement stmt = null;
 	ResultSet res = null;

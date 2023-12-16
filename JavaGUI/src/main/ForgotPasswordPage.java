@@ -141,7 +141,7 @@ public class ForgotPasswordPage extends JFrame {
 				if (tcKimlikTextField.getText().length() != 11)
 					JOptionPane.showMessageDialog(new JFrame(), "TC Kimlik 11 Haneli Olmalıdır.");
 				else {
-					Kullanicilar k = new Kullanicilar();
+					AppUsers k = new AppUsers();
 					if (k.checkUserForgotPassword(tcKimlikTextField.getText(), kullaniciAdiTextField.getText()
 							, guvenlikSorulariComboBox.getSelectedIndex(), guvenlikSorulariTextField.getText()))
 					{

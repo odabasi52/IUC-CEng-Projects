@@ -1,7 +1,5 @@
 package main;
 
-import java.security.*;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -9,8 +7,11 @@ import java.awt.Color;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.*;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -19,13 +20,31 @@ import javax.swing.JButton;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 
-public class LoginPage extends JFrame {
+public class LoginPage extends JFrame implements DatabasePath{
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField kullaniciAdiTextField;
 	private JPasswordField parolaTextField;
 	
+	boolean checkIfCalisan(String isim, StringBuilder parola, boolean is_admin)
+	{
+		ResultSet res = null;
+		boolean isCalisan = false;
+		try {
+			Class.forName("org.sqlite.JDBC");
+			Connection conn = DriverManager.getConnection("jdbc:sqlite:" + path);
+			Statement stmt = conn.createStatement();
+			res = stmt.executeQuery("SELECT COUNT(id) FROM calisanlar WHERE isim = '" + isim + "' AND parola = '" + parola + "' AND is_admin =" + is_admin + ";");
+			if (res.next() && res.getInt(1) > 0)
+				isCalisan = true;
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return isCalisan;
+	}
 
 	public LoginPage() {
 		super("GIRIS SAYFASI");
@@ -79,16 +98,21 @@ public class LoginPage extends JFrame {
 		rightPanel.add(girisButton);
 		girisButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					MessageDigest md5 = MessageDigest.getInstance("SHA-256");
-					byte[] hash = md5.digest(new String(parolaTextField.getPassword()).getBytes());
-					StringBuilder hexString = new StringBuilder();
-				    for (byte b : hash) {
-				      hexString.append(String.format("%02x", b));
-				    }
-				} catch (NoSuchAlgorithmException e1) {
-					e1.printStackTrace();
+				AppUsers k = new AppUsers();
+				String kullanici = kullaniciAdiTextField.getText();
+				StringBuilder parola = k.createHash(new String(parolaTextField.getPassword()));
+				
+				if (checkIfCalisan(kullanici, parola, true))
+				{
+					setVisible(false);
 				}
+				else if (checkIfCalisan(kullanici, parola, false)) {
+					NormalCalisanPage normal = new NormalCalisanPage();
+					normal.setVisible(true);
+					setVisible(false);
+				}
+				else
+					JOptionPane.showMessageDialog(new JFrame(), "Kullanıcı Adı veya Parola Hatalı");
 			}
 		});
 		

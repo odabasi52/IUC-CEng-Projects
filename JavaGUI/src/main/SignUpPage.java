@@ -156,8 +156,8 @@ public class SignUpPage extends JFrame {
 				else
 				{
 					/*KAYIT OLMA ISLEMLERI*/
-					Kullanicilar k = new Kullanicilar();
-					if(k.checkUser(tcKimlikTextField.getText()))
+					AppUsers k = new AppUsers();
+					if(k.checkUser(tcKimlikTextField.getText(), kullaniciAdiTextField.getText()))
 					{
 						k.create(kullaniciAdiTextField.getText(), tcKimlikTextField.getText(), new String(parolaTextField.getPassword()),
 								guvenlikSorulariComboBox.getSelectedIndex(), guvenlikSorulariTextField.getText());
