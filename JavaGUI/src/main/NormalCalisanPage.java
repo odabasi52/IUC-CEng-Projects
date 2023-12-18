@@ -21,21 +21,7 @@ public class NormalCalisanPage extends CalisanPage
 	
 private JTable table;
 	
-	void deleteUser(String userId) {
-		try {
-			Class.forName("org.sqlite.JDBC");
-			Connection conn = DriverManager.getConnection("jdbc:sqlite:" + path);
-			conn.setAutoCommit(false);
-			Statement stmt = conn.createStatement();
-			stmt.executeUpdate("DELETE from kullanicilar WHERE id = " + userId + ";");
-			stmt.close();
-			conn.commit();
-			conn.close();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+	
 	
 	void showKullaniciTable(int index) {
 		ResultSet res = null;
@@ -73,7 +59,7 @@ private JTable table;
 
 	NormalCalisanPage()
 	{
-		super();
+		super("Normal Çalışan Sayfası");
 		sayfaLabel.setText("NORMAL CALISAN SAYFASI");
 		JScrollPane tabelPane = new JScrollPane();
 		tabelPane.setBounds(10, 57, 713, 286);
@@ -103,7 +89,7 @@ private JTable table;
 			{
 				int row = table.getSelectedRow();
 				if (row != -1) {
-					deleteUser((String)table.getValueAt(row, 0));
+					deleteUser((String)table.getValueAt(row, 0), "kullanicilar");
 					showKullaniciTable(subeComboBox.getSelectedIndex());
 				}
 			}

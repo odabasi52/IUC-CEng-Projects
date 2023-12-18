@@ -38,6 +38,9 @@ public class LoginPage extends JFrame implements DatabasePath{
 			res = stmt.executeQuery("SELECT COUNT(id) FROM calisanlar WHERE isim = '" + isim + "' AND parola = '" + parola + "' AND is_admin =" + is_admin + ";");
 			if (res.next() && res.getInt(1) > 0)
 				isCalisan = true;
+			res.close();
+			stmt.close();
+			conn.close();
 		}
 		catch(Exception e)
 		{
@@ -104,6 +107,8 @@ public class LoginPage extends JFrame implements DatabasePath{
 				
 				if (checkIfCalisan(kullanici, parola, true))
 				{
+					AdminPage admin = new AdminPage();
+					admin.setVisible(true);
 					setVisible(false);
 				}
 				else if (checkIfCalisan(kullanici, parola, false)) {

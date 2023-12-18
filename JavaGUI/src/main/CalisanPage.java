@@ -6,6 +6,10 @@ import javax.swing.border.EmptyBorder;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
+
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
@@ -18,8 +22,25 @@ abstract class CalisanPage extends JFrame implements DatabasePath {
 	protected JPanel contentPane;
 	JPanel rightPanel;
 	protected JLabel sayfaLabel;
+	
+	void deleteUser(String userId, String table) {
+		try {
+			Class.forName("org.sqlite.JDBC");
+			Connection conn = DriverManager.getConnection("jdbc:sqlite:" + path);
+			conn.setAutoCommit(false);
+			Statement stmt = conn.createStatement();
+			stmt.executeUpdate("DELETE from " + table + " WHERE id = " + userId + ";");
+			stmt.close();
+			conn.commit();
+			conn.close();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
-	public CalisanPage() {
+	public CalisanPage(String label) {
+		super(label);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 800, 500);
 		contentPane = new JPanel();
@@ -56,5 +77,7 @@ abstract class CalisanPage extends JFrame implements DatabasePath {
 				setVisible(false);
 			}
 		});
+		
+
 	}
 }
