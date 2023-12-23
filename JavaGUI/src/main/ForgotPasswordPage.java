@@ -146,8 +146,13 @@ public class ForgotPasswordPage extends JFrame {
 							, guvenlikSorulariComboBox.getSelectedIndex(), guvenlikSorulariTextField.getText()))
 					{
 						String parola = JOptionPane.showInputDialog("Yeni Parola");
-						while (parola.length() < 8)
+						if (parola == null)
+							return;
+						while (parola.length() < 8) {
 							parola = JOptionPane.showInputDialog("Yeni Parola [En az 8 Haneli]");
+							if (parola == null)
+								return;
+						}
 						if (parola != null)
 						{
 							k.otherQuery("UPDATE kullanicilar SET parola = '" + k.createHash(parola) + "' WHERE tc_kimlik = '" + k.createHash(tcKimlikTextField.getText()) + "';");

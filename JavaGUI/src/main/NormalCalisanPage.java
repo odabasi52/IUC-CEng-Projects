@@ -98,6 +98,7 @@ private JTable table;
 					deleteUser((String)table.getValueAt(row, 0), "kullanicilar");
 					deleteUser((String)table.getValueAt(row, 0), "cuzdan");
 					deleteUser((String)table.getValueAt(row, 0), "hesap_hareketleri");
+					deleteUser((String)table.getValueAt(row, 0), "doviz_cuzdan");
 					showKullaniciTable(subeComboBox.getSelectedIndex());
 				}
 			}

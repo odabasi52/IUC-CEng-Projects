@@ -101,6 +101,7 @@ public class KullaniciPage extends JFrame implements IDatabasePath{
 	}
 
 	public KullaniciPage(int id) {
+		super("KULLANICI SAYFASI");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 800, 500);
 		contentPane = new JPanel();
