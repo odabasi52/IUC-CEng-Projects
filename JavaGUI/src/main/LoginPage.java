@@ -20,14 +20,14 @@ import javax.swing.JButton;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 
-public class LoginPage extends JFrame implements DatabasePath{
+public class LoginPage extends JFrame implements IDatabasePath, ILogin{
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField kullaniciAdiTextField;
 	private JPasswordField parolaTextField;
 	
-	boolean checkIf(String table, String isim, StringBuilder parola, boolean is_admin)
+	public boolean checkIf(String table, String isim, StringBuilder parola, boolean is_admin)
 	{
 		ResultSet res = null;
 		boolean is = false;
@@ -53,7 +53,7 @@ public class LoginPage extends JFrame implements DatabasePath{
 		return is;
 	}
 	
-	int returnID(String isim)
+	public int returnID(String isim)
 	{
 		int id = 0;
 		ResultSet res = null;

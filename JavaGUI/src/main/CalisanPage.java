@@ -16,7 +16,7 @@ import javax.swing.SwingConstants;
 import java.awt.Font;
 
 
-abstract class CalisanPage extends JFrame implements DatabasePath {
+abstract class CalisanPage extends JFrame implements IDatabasePath {
 
 	private static final long serialVersionUID = 1L;
 	protected JPanel contentPane;

@@ -2,11 +2,7 @@ package main;
 
 import java.awt.EventQueue;
 /*
-CREATE TABLE subeler(id int, isim text);
-CREATE TABLE hesap_hareketleri(musteri_id int, islem text);
-CREATE TABLE cuzdan(musteri_id int, para int);
-CREATE TABLE calisanlar(id int, isim text, parola text, rol text, is_admin bool);
-CREATE TABLE kullanicilar(id int, isim text, tc_kimlik text, parola text, soru_id int, soru_cevap text,sube_id int);
+admin - admin --- admin sayfasına default giriş.
 */
 
 public class Main {

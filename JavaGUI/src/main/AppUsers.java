@@ -1,6 +1,9 @@
 package main;
 
+import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.Random;
 
 import javax.swing.JFrame;
@@ -8,6 +11,27 @@ import javax.swing.JOptionPane;
 
 public class AppUsers extends DatabaseStuffs{
 
+	static int user_id = 0;
+	static int calisan_id = 0;
+	
+	int returnCalisanID()
+	{
+		ResultSet res = null;
+		try {
+			Class.forName("org.sqlite.JDBC");
+			Connection conn = DriverManager.getConnection("jdbc:sqlite:" + path);
+			Statement stmt = conn.createStatement();
+			res = stmt.executeQuery("SELECT COUNT(id) FROM calisanlar;");
+			calisan_id = res.getInt(1);
+			res.close();
+			stmt.close();
+			conn.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return (calisan_id);
+	}
+	
 	boolean checkUser(String tc_kimlik, String isim)
 	{
 		conn = null;
@@ -64,21 +88,23 @@ public class AppUsers extends DatabaseStuffs{
 	
 	void create(String isim, String tc_kimlik, String parola, int soru_id, String soru_cevap)
 	{
-		int id = 0;
 		try {
-			Class.forName("org.sqlite.JDBC");
-			conn = DriverManager.getConnection("jdbc:sqlite:" + path);
-			stmt = conn.createStatement();
-			res = stmt.executeQuery("SELECT COUNT(id) FROM kullanicilar;");		
-			if (res.next() && res.getInt(1) > 0) {
-				id = res.getInt(1);
+			if (user_id == 0)
+			{
+				Class.forName("org.sqlite.JDBC");
+				conn = DriverManager.getConnection("jdbc:sqlite:" + path);
+				stmt = conn.createStatement();
+				res = stmt.executeQuery("SELECT COUNT(id) FROM kullanicilar;");		
+				if (res.next() && res.getInt(1) > 0) {
+					user_id = res.getInt(1);
+				}
+				res.close();
+				stmt.close();
+				conn.close();
 			}
-			res.close();
-			stmt.close();
-			conn.close();
 			
 	        otherQuery(String.format("INSERT INTO kullanicilar(id, isim, tc_kimlik, parola, soru_id, soru_cevap,sube_id) VALUES(%d, '%s', '%s', '%s', %d, '%s', %d);",
-	                id + 1,
+	        		user_id + 1,
 	                isim,
 	                createHash(tc_kimlik),
 	                createHash(parola),
@@ -87,7 +113,9 @@ public class AppUsers extends DatabaseStuffs{
 	                new Random().nextInt(4)
 	        ));
 	        
-	        otherQuery("INSERT INTO cuzdan VALUES("+(id + 1)+", 0);");
+	        otherQuery("INSERT INTO cuzdan VALUES("+(user_id + 1)+", 0);");
+	        otherQuery("INSERT INTO doviz_cuzdan VALUES("+(user_id + 1)+", 0);");
+	        user_id++;
 	    } catch (Exception e) {
 	        e.printStackTrace(); 
 	    }

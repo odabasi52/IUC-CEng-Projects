@@ -25,13 +25,13 @@ import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
-public class KullaniciPage extends JFrame implements DatabasePath{
+public class KullaniciPage extends JFrame implements IDatabasePath{
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField paraTextField;
 	
-	int returnMoney(int id)
+	int returnMoney(int id, String table)
 	{
 		int money = 0;
 		ResultSet res = null;
@@ -39,7 +39,7 @@ public class KullaniciPage extends JFrame implements DatabasePath{
 			Class.forName("org.sqlite.JDBC");
 			Connection conn = DriverManager.getConnection("jdbc:sqlite:" + path);
 			Statement stmt = conn.createStatement();
-			res = stmt.executeQuery("SELECT para FROM cuzdan WHERE musteri_id = " + id + ";");
+			res = stmt.executeQuery("SELECT para FROM " + table + " WHERE musteri_id = " + id + ";");
 			money = res.getInt(1);
 			res.close();
 			stmt.close();
@@ -50,7 +50,7 @@ public class KullaniciPage extends JFrame implements DatabasePath{
 		return (money);
 	}
 	
-	int returnID(StringBuilder TC)
+	int getID(StringBuilder TC)
 	{
 		int id = 0;
 		ResultSet res = null;
@@ -149,15 +149,15 @@ public class KullaniciPage extends JFrame implements DatabasePath{
 		paraMiktariLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		paraMiktariLabel.setBackground(SystemColor.activeCaption);
 		paraMiktariLabel.setForeground(SystemColor.window);
-		paraMiktariLabel.setBounds(223, 348, 341, 14);
+		paraMiktariLabel.setBounds(211, 335, 341, 14);
 		backgroundPanel.add(paraMiktariLabel);
-		paraMiktariLabel.setText("PARA MİKTARI: "+ returnMoney(id) +"TL");
+		paraMiktariLabel.setText("PARA MİKTARI: " + returnMoney(id, "cuzdan") + "TL");
 		
 		
 		JButton paraCekButton = new JButton("PARA ÇEK");
 		paraCekButton.setBackground(SystemColor.window);
 		paraCekButton.setForeground(SystemColor.activeCaption);
-		paraCekButton.setBounds(179, 401, 110, 23);
+		paraCekButton.setBounds(47, 401, 110, 23);
 		backgroundPanel.add(paraCekButton);
 		paraCekButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -171,8 +171,7 @@ public class KullaniciPage extends JFrame implements DatabasePath{
 					return;
 				}
 				
-				int last = returnMoney(id) - money;
-				System.out.println(money);
+				int last = returnMoney(id, "cuzdan") - money;
 				if (last < 0)
 					JOptionPane.showMessageDialog(new JFrame(), "Yeterli Paranız Yok.");
 				else {
@@ -189,7 +188,7 @@ public class KullaniciPage extends JFrame implements DatabasePath{
 		JButton paraYatirButton = new JButton("PARA YATIR");
 		paraYatirButton.setForeground(SystemColor.activeCaption);
 		paraYatirButton.setBackground(SystemColor.window);
-		paraYatirButton.setBounds(334, 401, 116, 23);
+		paraYatirButton.setBounds(183, 401, 116, 23);
 		backgroundPanel.add(paraYatirButton);
 		paraYatirButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -202,7 +201,7 @@ public class KullaniciPage extends JFrame implements DatabasePath{
 				{
 					return;
 				}
-				int last = money + returnMoney(id);
+				int last = money + returnMoney(id, "cuzdan");
 				a.otherQuery("UPDATE cuzdan SET para = " + last + " WHERE musteri_id = "+ id +";");
 				a.otherQuery("INSERT INTO hesap_hareketleri VALUES(" + id + ", '" + money + "TL PARA YATIRILDI');");
 				paraMiktariLabel.setText("PARA MİKTARI: " + last + "TL");
@@ -213,7 +212,7 @@ public class KullaniciPage extends JFrame implements DatabasePath{
 		JButton havaleButton = new JButton("HAVALE");
 		havaleButton.setForeground(SystemColor.activeCaption);
 		havaleButton.setBackground(SystemColor.window);
-		havaleButton.setBounds(487, 401, 116, 23);
+		havaleButton.setBounds(329, 401, 116, 23);
 		backgroundPanel.add(havaleButton);
 		havaleButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -221,7 +220,7 @@ public class KullaniciPage extends JFrame implements DatabasePath{
 				String tc = JOptionPane.showInputDialog("Havale Edeceğiniz Kişinin TC' si");
 				if (tc == null)
 					return;
-				int target_id = returnID(a.createHash(tc));
+				int target_id = getID(a.createHash(tc));
 				if (target_id == 0)
 					JOptionPane.showMessageDialog(new JFrame(), "Kişi Bulunamadı");
 				else {
@@ -234,15 +233,87 @@ public class KullaniciPage extends JFrame implements DatabasePath{
 						return;
 					}
 					System.out.println(target_id + " " + id);
-					int lastMine = returnMoney(id) - money;
+					int lastMine = returnMoney(id, "cuzdan") - money;
 					a.otherQuery("UPDATE cuzdan SET para = " + lastMine + " WHERE musteri_id = "+ id +";");
-					int lastTarget = money + returnMoney(target_id);
+					int lastTarget = money + returnMoney(target_id, "cuzdan");
 					a.otherQuery("UPDATE cuzdan SET para = " + lastTarget + " WHERE musteri_id = "+ target_id +";");
 					a.otherQuery("INSERT INTO hesap_hareketleri VALUES(" + id + ", '" + target_id + " NOLU KİŞİYE " + money + "TL HAVALE GÖNDERİLDİ');");
 					a.otherQuery("INSERT INTO hesap_hareketleri VALUES(" + target_id + ", '" + id + " NOLU KİŞİDEN " + money + "TL HAVALE GELDİ');");
 					if (id == target_id)
 						lastMine = lastTarget;
 					paraMiktariLabel.setText("PARA MİKTARI: " + lastMine + "TL");
+					showHareketTable(id);
+				}
+			}
+		});
+		
+		JLabel dovizMiktariLabel = new JLabel("PARA MİKTARI: 0$");
+		dovizMiktariLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		dovizMiktariLabel.setForeground(SystemColor.window);
+		dovizMiktariLabel.setBackground(SystemColor.activeCaption);
+		dovizMiktariLabel.setBounds(213, 350, 341, 14);
+		backgroundPanel.add(dovizMiktariLabel);
+		dovizMiktariLabel.setText("DÖVİZ MİKTARI: " + returnMoney(id, "doviz_cuzdan") + "$");
+		
+		JButton btnDvizAl = new JButton("DOLAR AL");
+		btnDvizAl.setForeground(SystemColor.activeCaption);
+		btnDvizAl.setBackground(SystemColor.window);
+		btnDvizAl.setBounds(480, 401, 116, 23);
+		backgroundPanel.add(btnDvizAl);
+		btnDvizAl.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AppUsers a = new AppUsers();
+				int money;
+				try {
+					 money = Integer.valueOf(paraTextField.getText());
+				}
+				catch (NumberFormatException ee)
+				{
+					return;
+				}
+				int last = returnMoney(id, "cuzdan") - money;
+				if (last < 0)
+					JOptionPane.showMessageDialog(new JFrame(), "Yeterli Paranız Yok.");
+				else
+				{
+					int lastDoviz = money / 30 + returnMoney(id, "doviz_cuzdan");
+					a.otherQuery("UPDATE doviz_cuzdan SET para = " + lastDoviz + " WHERE musteri_id = "+ id +";");
+					a.otherQuery("UPDATE cuzdan SET para = " + last + " WHERE musteri_id = "+ id +";");
+					a.otherQuery("INSERT INTO hesap_hareketleri VALUES(" + id + ", '" + (money / 30) + "$ DÖVİZ ALINDI');");
+					paraMiktariLabel.setText("PARA MİKTARI: " + last + "TL");
+					dovizMiktariLabel.setText("DÖVİZ MİKTARI: " + lastDoviz + "$");
+					showHareketTable(id);
+				}
+			}
+		});
+		
+		JButton btnDvizSat = new JButton("DOLAR SAT");
+		btnDvizSat.setForeground(SystemColor.activeCaption);
+		btnDvizSat.setBackground(SystemColor.window);
+		btnDvizSat.setBounds(624, 401, 116, 23);
+		backgroundPanel.add(btnDvizSat);
+		btnDvizSat.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AppUsers a = new AppUsers();
+				int money;
+				try {
+					 money = Integer.valueOf(paraTextField.getText());
+				}
+				catch (NumberFormatException ee)
+				{
+					return;
+				}
+				int last = returnMoney(id, "doviz_cuzdan") - money;
+				if (last < 0)
+					JOptionPane.showMessageDialog(new JFrame(), "Yeterli Dolarınız Yok.");
+				else
+				{
+					int lastPara = returnMoney(id, "cuzdan") + (money * 30);
+					a.otherQuery("UPDATE doviz_cuzdan SET para = " + last + " WHERE musteri_id = "+ id +";");
+					a.otherQuery("UPDATE cuzdan SET para = " + lastPara + " WHERE musteri_id = "+ id +";");
+					a.otherQuery("INSERT INTO hesap_hareketleri VALUES(" + id + ", '" + money + "$ DÖVİZ SATILDI');");
+					paraMiktariLabel.setText("PARA MİKTARI: " + lastPara + "TL");
+					dovizMiktariLabel.setText("DÖVİZ MİKTARI: " + last + "$");
 					showHareketTable(id);
 				}
 			}
@@ -259,7 +330,7 @@ public class KullaniciPage extends JFrame implements DatabasePath{
 		JButton geriButton = new JButton("GERİ");
 		geriButton.setBackground(SystemColor.window);
 		geriButton.setForeground(SystemColor.activeCaption);
-		geriButton.setBounds(10, 427, 89, 23);
+		geriButton.setBounds(10, 7, 89, 23);
 		backgroundPanel.add(geriButton);
 		geriButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -268,5 +339,8 @@ public class KullaniciPage extends JFrame implements DatabasePath{
 				setVisible(false);
 			}
 		});
+		
+
+		
 	}
 }

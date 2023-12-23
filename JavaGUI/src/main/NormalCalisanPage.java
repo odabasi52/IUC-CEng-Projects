@@ -15,7 +15,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-public class NormalCalisanPage extends CalisanPage
+public class NormalCalisanPage extends CalisanPage implements ITableShow
 {
 	private static final long serialVersionUID = 1L;
 	
@@ -55,6 +55,11 @@ private JTable table;
 			e.printStackTrace();
 		}
 	}
+	
+	public void showTables()
+	{
+		showKullaniciTable(4);
+	}
 
 
 	NormalCalisanPage()
@@ -72,6 +77,7 @@ private JTable table;
 		JComboBox<String> subeComboBox = new JComboBox<String>(subeler);
 		subeComboBox.setBounds(10, 24, 713, 22);
 		rightPanel.add(subeComboBox);
+		subeComboBox.setSelectedIndex(4);
 		subeComboBox.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -96,5 +102,6 @@ private JTable table;
 				}
 			}
 		});
+		showTables();
 	}
 }

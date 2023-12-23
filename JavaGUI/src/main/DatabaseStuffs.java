@@ -8,17 +8,17 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 
-public abstract class DatabaseStuffs implements DatabasePath{
+public abstract class DatabaseStuffs implements IDatabasePath{
 	Connection conn = null;
 	Statement stmt = null;
 	ResultSet res = null;
 	
 	StringBuilder createHash(String str)
 	{
-		MessageDigest md5;
+		MessageDigest sha;
 		try {
-			md5 = MessageDigest.getInstance("SHA-256");
-			byte[] hash = md5.digest(new String(str).getBytes());
+			sha = MessageDigest.getInstance("SHA-256");
+			byte[] hash = sha.digest(new String(str).getBytes());
 			StringBuilder hexString = new StringBuilder();
 		    for (byte b : hash) {
 		      hexString.append(String.format("%02x", b));

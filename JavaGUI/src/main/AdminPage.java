@@ -18,7 +18,7 @@ import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
-public class AdminPage extends CalisanPage{
+public class AdminPage extends CalisanPage implements ITableShow{
 	private static final long serialVersionUID = 1L;
 	
 	private JTable subelerTable;
@@ -113,23 +113,11 @@ public class AdminPage extends CalisanPage{
 		}
 	}
 	
-	int returnID()
+	public void showTables()
 	{
-		int id = 0;
-		ResultSet res = null;
-		try {
-			Class.forName("org.sqlite.JDBC");
-			Connection conn = DriverManager.getConnection("jdbc:sqlite:" + path);
-			Statement stmt = conn.createStatement();
-			res = stmt.executeQuery("SELECT COUNT(id) FROM calisanlar;");
-			id = res.getInt(1);
-			res.close();
-			stmt.close();
-			conn.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return (id);
+		showSubeTable();
+		showCalisanTable();
+		showKullaniciTable();
 	}
 
 	AdminPage()
@@ -228,7 +216,7 @@ public class AdminPage extends CalisanPage{
 						return ;
 				}
 				AppUsers a = new AppUsers();
-				a.otherQuery(String.format("INSERT INTO calisanlar VALUES(%d, '%s', '%s', '%s', %b);",returnID() ,isim, a.createHash(parola), rol, is_admin.charAt(0) == 'Y'));
+				a.otherQuery(String.format("INSERT INTO calisanlar VALUES(%d, '%s', '%s', '%s', %b);",a.returnCalisanID() ,isim, a.createHash(parola), rol, is_admin.charAt(0) == 'Y'));
 				showCalisanTable();
 			}
 		});
@@ -249,8 +237,6 @@ public class AdminPage extends CalisanPage{
 			}
 		});
 		
-		showSubeTable();
-		showCalisanTable();
-		showKullaniciTable();
+		showTables();
 	}
 }
