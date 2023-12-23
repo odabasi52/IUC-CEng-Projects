@@ -78,7 +78,7 @@ public class AppUsers extends DatabaseStuffs{
 			conn.close();
 			
 	        otherQuery(String.format("INSERT INTO kullanicilar(id, isim, tc_kimlik, parola, soru_id, soru_cevap,sube_id) VALUES(%d, '%s', '%s', '%s', %d, '%s', %d);",
-	                id,
+	                id + 1,
 	                isim,
 	                createHash(tc_kimlik),
 	                createHash(parola),
@@ -86,6 +86,8 @@ public class AppUsers extends DatabaseStuffs{
 	                soru_cevap,
 	                new Random().nextInt(4)
 	        ));
+	        
+	        otherQuery("INSERT INTO cuzdan VALUES("+(id + 1)+", 0);");
 	    } catch (Exception e) {
 	        e.printStackTrace(); 
 	    }

@@ -90,6 +90,8 @@ private JTable table;
 				int row = table.getSelectedRow();
 				if (row != -1) {
 					deleteUser((String)table.getValueAt(row, 0), "kullanicilar");
+					deleteUser((String)table.getValueAt(row, 0), "cuzdan");
+					deleteUser((String)table.getValueAt(row, 0), "hesap_hareketleri");
 					showKullaniciTable(subeComboBox.getSelectedIndex());
 				}
 			}

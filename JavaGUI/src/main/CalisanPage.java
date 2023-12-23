@@ -29,7 +29,10 @@ abstract class CalisanPage extends JFrame implements DatabasePath {
 			Connection conn = DriverManager.getConnection("jdbc:sqlite:" + path);
 			conn.setAutoCommit(false);
 			Statement stmt = conn.createStatement();
-			stmt.executeUpdate("DELETE from " + table + " WHERE id = " + userId + ";");
+			if (table == "cuzdan" || table == "hesap_hareketleri")
+				stmt.executeUpdate("DELETE from " + table + " WHERE musteri_id = " + userId + ";");
+			else	
+				stmt.executeUpdate("DELETE from " + table + " WHERE id = " + userId + ";");
 			stmt.close();
 			conn.commit();
 			conn.close();

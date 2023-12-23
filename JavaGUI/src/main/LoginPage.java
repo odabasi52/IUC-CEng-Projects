@@ -27,17 +27,21 @@ public class LoginPage extends JFrame implements DatabasePath{
 	private JTextField kullaniciAdiTextField;
 	private JPasswordField parolaTextField;
 	
-	boolean checkIfCalisan(String isim, StringBuilder parola, boolean is_admin)
+	boolean checkIf(String table, String isim, StringBuilder parola, boolean is_admin)
 	{
 		ResultSet res = null;
-		boolean isCalisan = false;
+		boolean is = false;
 		try {
 			Class.forName("org.sqlite.JDBC");
 			Connection conn = DriverManager.getConnection("jdbc:sqlite:" + path);
 			Statement stmt = conn.createStatement();
-			res = stmt.executeQuery("SELECT COUNT(id) FROM calisanlar WHERE isim = '" + isim + "' AND parola = '" + parola + "' AND is_admin =" + is_admin + ";");
+			if (table == "calisanlar")
+				res = stmt.executeQuery("SELECT COUNT(id) FROM " + table + " WHERE isim = '" + isim + "' AND parola = '" + parola + "' AND is_admin =" + is_admin + ";");
+			else
+				res = stmt.executeQuery("SELECT COUNT(id) FROM " + table + " WHERE isim = '" + isim + "' AND parola = '" + parola + "';");
+			
 			if (res.next() && res.getInt(1) > 0)
-				isCalisan = true;
+				is = true;
 			res.close();
 			stmt.close();
 			conn.close();
@@ -46,7 +50,26 @@ public class LoginPage extends JFrame implements DatabasePath{
 		{
 			e.printStackTrace();
 		}
-		return isCalisan;
+		return is;
+	}
+	
+	int returnID(String isim)
+	{
+		int id = 0;
+		ResultSet res = null;
+		try {
+			Class.forName("org.sqlite.JDBC");
+			Connection conn = DriverManager.getConnection("jdbc:sqlite:" + path);
+			Statement stmt = conn.createStatement();
+			res = stmt.executeQuery("SELECT id FROM kullanicilar WHERE isim = '" + isim + "';");
+			id = res.getInt(1);
+			res.close();
+			stmt.close();
+			conn.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return (id);
 	}
 
 	public LoginPage() {
@@ -105,15 +128,23 @@ public class LoginPage extends JFrame implements DatabasePath{
 				String kullanici = kullaniciAdiTextField.getText();
 				StringBuilder parola = k.createHash(new String(parolaTextField.getPassword()));
 				
-				if (checkIfCalisan(kullanici, parola, true))
+				
+				if (checkIf("calisanlar",kullanici, parola, true))
 				{
 					AdminPage admin = new AdminPage();
 					admin.setVisible(true);
 					setVisible(false);
 				}
-				else if (checkIfCalisan(kullanici, parola, false)) {
+				else if (checkIf("calisanlar",kullanici, parola, false)) {
 					NormalCalisanPage normal = new NormalCalisanPage();
 					normal.setVisible(true);
+					setVisible(false);
+				}
+				else if (checkIf("kullanicilar",kullanici, parola, false))
+				{
+					int id = returnID(kullanici);
+					KullaniciPage k_page = new KullaniciPage(id);
+					k_page.setVisible(true);
 					setVisible(false);
 				}
 				else
