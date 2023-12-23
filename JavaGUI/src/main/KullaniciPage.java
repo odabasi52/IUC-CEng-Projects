@@ -233,12 +233,13 @@ public class KullaniciPage extends JFrame implements DatabasePath{
 					{
 						return;
 					}
+					System.out.println(target_id + " " + id);
 					int lastMine = returnMoney(id) - money;
 					a.otherQuery("UPDATE cuzdan SET para = " + lastMine + " WHERE musteri_id = "+ id +";");
 					int lastTarget = money + returnMoney(target_id);
 					a.otherQuery("UPDATE cuzdan SET para = " + lastTarget + " WHERE musteri_id = "+ target_id +";");
-					a.otherQuery("INSERT INTO hesap_hareketleri VALUES(" + id + ", '" + id + " NOLU KİŞİYE " + money + "TL HAVALE GÖNDERİLDİ');");
-					a.otherQuery("INSERT INTO hesap_hareketleri VALUES(" + target_id + ", '" + target_id + " NOLU KİŞİDEN " + money + "TL HAVALE GELDİ');");
+					a.otherQuery("INSERT INTO hesap_hareketleri VALUES(" + id + ", '" + target_id + " NOLU KİŞİYE " + money + "TL HAVALE GÖNDERİLDİ');");
+					a.otherQuery("INSERT INTO hesap_hareketleri VALUES(" + target_id + ", '" + id + " NOLU KİŞİDEN " + money + "TL HAVALE GELDİ');");
 					if (id == target_id)
 						lastMine = lastTarget;
 					paraMiktariLabel.setText("PARA MİKTARI: " + lastMine + "TL");
